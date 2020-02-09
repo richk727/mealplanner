@@ -1,5 +1,7 @@
 <?php
 
+use App\Recipe;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +18,13 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/recipes', 'RecipesController@index');
+    Route::get('/recipes/create', 'RecipesController@create');
+    Route::get('/recipes/{recipe}', 'RecipesController@show');    
+    Route::post('/recipes', 'RecipesController@store');
+
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+
