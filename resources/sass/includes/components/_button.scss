@@ -1,0 +1,68 @@
+.button {
+    position: relative;
+    display: inline-block;
+    padding: .9rem 1.6rem;
+    font-size: 1.8rem;
+    font-weight: $font-weight-semibold;
+    border: 1px solid transparent;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    &:focus,
+    &:hover {
+        text-decoration: none;
+    }
+
+    &--full {
+        display: block;
+        width: 100%;
+    }
+
+    &--sm {
+        padding: .5rem .8rem;
+        font-size: 1.4rem;
+    }
+
+    &--lg {
+        padding: 1.4rem 2.1rem;
+        font-size: 2.2rem;
+    }
+}
+
+// Primary
+.button-primary {
+    color: $gray-200;
+    background-color: $primary;
+
+    &:hover {
+        color: $gray-200;
+        background-color: $primary-800;
+    }
+}
+
+
+
+.button-inverted {
+    color: $primary;
+    background-color: $gray-200;
+    border-color: $gray-200;
+
+    &:focus,
+    &:hover {
+        color: $primary-800;
+        background-color: $white;
+    }
+
+    &--outline {
+        color: $gray-200;
+        background-color: transparent;
+        border-color: $gray-200;
+
+        &:focus,
+        &:hover {
+            color: $primary;
+            background-color: $gray-200;
+        }
+    }
+}

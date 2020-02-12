@@ -24,7 +24,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/recipes/create', 'RecipesController@create');
     Route::get('/recipes/{recipe}', 'RecipesController@show');    
     Route::post('/recipes', 'RecipesController@store');
-
-    Route::get('/home', 'HomeController@index')->name('home');
 });
 

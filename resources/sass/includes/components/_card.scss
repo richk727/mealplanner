@@ -1,0 +1,16 @@
+.card {    
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background: $white;
+    box-shadow: $box-shadow;
+
+    &__body {
+        padding: 3.2rem 3.2rem 1.6rem;
+    }
+
+    &__footer {
+        padding: 1.6rem 3.2rem 3.2rem;
+    }
+}

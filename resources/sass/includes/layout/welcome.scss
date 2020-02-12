@@ -1,0 +1,53 @@
+.welcome-page-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('./../../../images/welcome-bg.jpg');
+    background-size: cover;
+    
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(20, 20, 20, 0.4);
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(to top, rgba($primary, 1), rgba($primary, 0));
+        opacity: 0.2;
+    }
+}
+
+.welcome-page-container {
+    position: relative;
+    display: flex;    
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;    
+}
+
+.welcome-page-card {
+    padding: 0 2.5rem 5rem;
+    color: $white;
+    background: $primary;
+    border-radius: $border-radius-sm;
+}
+
+.welcome-page-card-links {
+    display: flex;
+    justify-content: center;
+
+    .button {
+        margin: 0 1rem;
+    }
+}

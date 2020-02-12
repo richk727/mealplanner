@@ -1,0 +1,21 @@
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+        display: inline-block;
+        padding: 0 3.2rem;
+    }
+
+    &__link {
+        color: $gray-200;
+        font-weight: $font-weight-semibold;
+        transition: $transition-base;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
