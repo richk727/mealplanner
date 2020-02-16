@@ -2,17 +2,37 @@
 
 namespace Tests\Setup;
 
+use App\Step;
 use App\User;
 use App\Recipe;
 
 class RecipeFactory
 {
     /**
+     * Number of steps for the recipe
+     * @var int
+     */
+    protected $stepsCount = 0;
+
+    /**
      * The owner of the recipe
      * 
      * @var $user
      */
     protected $user;
+
+    /**
+     * Sets the number of steps created for the recipe
+     * 
+     * @param int $count
+     * @return $this
+     */
+    public function withSteps($count)
+    {
+        $this->stepsCount = $count;
+
+        return $this;
+    }
 
     /**
      * Set the owner of a recipe
@@ -39,6 +59,9 @@ class RecipeFactory
             'owner_id' => $this->user ?? factory(User::class)
         ]);
 
+        factory(Step::class, $this->stepsCount)->create([
+            'recipe_id' => $recipe->id
+        ]);
 
         return $recipe;
     }

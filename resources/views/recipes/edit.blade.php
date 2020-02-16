@@ -32,6 +32,11 @@
                             <p>
                                 <textarea name="description" id="description" rows="4">{{ $recipe->description }}</textarea>
                             </p>
+                            <ol>                            
+                                @foreach ($recipe->steps as $step)                     
+                                    <li>{{ $step->body }}</li>
+                                @endforeach
+                            </ol>                
                         </div>
                     </div>                   
                 </div>

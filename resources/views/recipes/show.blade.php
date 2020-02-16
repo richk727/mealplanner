@@ -20,6 +20,15 @@
                     <div class="col-md-6">
                         <h3 class="my-4">{{ $recipe->title }}</h3>
                         <p>{{ $recipe->description }}</p>
+                        <ol>                            
+                            @foreach ($recipe->steps as $step)                     
+                                <li>{{ $step->body }}</li>
+                            @endforeach
+                        </ol> 
+                        <form action="{{ $recipe->path() . '/steps' }}" method="POST">
+                            @csrf
+                            <input type="text" name="body" placeholder="Add a step to this recipe...">
+                        </form>                        
                     </div>
                 </div>
             </div>
