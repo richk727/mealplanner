@@ -7,7 +7,7 @@
         </div>
         
         <div class="col-md-6 text-md-right">
-            <a class="button button-primary" href="/recipes/create">Edit Recipe</a>
+            <a class="button button-primary" href="{{ $recipe->path() . '/edit' }}">Edit Recipe</a>
         </div>        
     </div>
     <div class="row">

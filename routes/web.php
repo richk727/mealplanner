@@ -22,7 +22,11 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/recipes', 'RecipesController@index');
     Route::get('/recipes/create', 'RecipesController@create');
+    
     Route::get('/recipes/{recipe}', 'RecipesController@show');    
+    Route::get('/recipes/{recipe}/edit', 'RecipesController@edit');
+    Route::patch('/recipes/{recipe}', 'RecipesController@update');
+
     Route::post('/recipes', 'RecipesController@store');
 });
 

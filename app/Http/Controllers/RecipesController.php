@@ -19,6 +19,11 @@ class RecipesController extends Controller
         return view('recipes.index', compact('recipes'));
     }
 
+    /**
+     * Create a new recipe
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('recipes.create');
@@ -42,7 +47,10 @@ class RecipesController extends Controller
     /**
      * Show a recipe
      * 
+     * @param Recipe $recipe
+     * 
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Recipe $recipe)
     {
@@ -51,6 +59,44 @@ class RecipesController extends Controller
         };
         
         return view('recipes.show', compact('recipe')); 
+    }
+
+    /**
+     * Update a recipe
+     * 
+     * @param Recipe $recipe
+     * 
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(Recipe $recipe)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+        
+        $attributes = $this->validateRequest();
+
+        $recipe->update($attributes);
+
+        return redirect($recipe->path());
+    }
+
+    /**
+     * Edit a recipe
+     * 
+     * @param Recipe $recipe
+     * 
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function edit(Recipe $recipe)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+        
+        return view('recipes.edit', compact('recipe')); 
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Recipe;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facades\Tests\Setup\RecipeFactory;
 
 class RecipesTest extends TestCase
 {
@@ -35,9 +37,9 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_view_their_recipe()
     {
-        $this->be(factory('App\User')->create());
+        $this->signIn();
         
-        $recipe = factory('App\Recipe')->create(['owner_id' => auth()->id()]);
+        $recipe = factory(Recipe::class)->create(['owner_id' => auth()->id()]);
         
         $this->get($recipe->path())
             ->assertSee($recipe->title)
@@ -45,11 +47,46 @@ class RecipesTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_edit_their_recipe()
+    {
+        $this->signIn();
+        
+        $recipe = factory(Recipe::class)->create(['owner_id' => auth()->id()]);
+        
+        $this->get($recipe->path() . '/edit')
+            ->assertSee($recipe->title)
+            ->assertSee($recipe->description);
+    }
+
+    /** @test */
+    public function a_user_can_update_a_recipe()
+    {        
+        $this->withoutExceptionHandling();
+
+        $recipe = RecipeFactory::create();
+        
+        
+        $attributes = [
+            'title' => 'Changed Title',
+            'description' => 'Changed decription'
+        ];
+
+        $this->actingAs($recipe->owner)
+            ->patch($recipe->path(), $attributes)
+            ->assertRedirect($recipe->path());       
+            
+        $this->get($recipe->path() . '/edit')
+            ->assertOk();
+        
+        $this->assertDatabaseHas('recipes', $attributes);
+    }
+
+    /** @test */
     public function an_authenticated_user_cannot_view_the_recipes_of_others()
     {
-        $this->be(factory('App\User')->create());
+        $this->signIn();
         
-        $recipe = factory('App\Recipe')->create();
+        $recipe = factory(Recipe::class)->create();
         
         $this->get($recipe->path())
             ->assertStatus(403);
@@ -58,7 +95,7 @@ class RecipesTest extends TestCase
     /** @test */
     public function guests_cannot_manage_recipes()
     {
-        $recipe = factory('App\Recipe')->create();
+        $recipe = factory(Recipe::class)->create();
 
         $this->get('/recipes')->assertRedirect('login');
         $this->get($recipe->path())->assertRedirect('login');
@@ -75,7 +112,7 @@ class RecipesTest extends TestCase
     /** @test */
     public function guests_may_not_view_a_single_recipe()
     {
-        $recipe = factory('App\Recipe')->create();
+        $recipe = factory(Recipe::class)->create();
         $this->get($recipe->path())->assertRedirect('login');
     }
 
@@ -83,7 +120,7 @@ class RecipesTest extends TestCase
     public function a_recipe_requires_a_title()
     {
         $this->signIn();
-        $attributes = factory('App\Recipe')->raw(['title' => '']);
+        $attributes = factory(Recipe::class)->raw(['title' => '']);
 
         $this->post('/recipes', $attributes)
             ->assertSessionHasErrors('title');
