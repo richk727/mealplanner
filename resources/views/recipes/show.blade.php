@@ -37,6 +37,16 @@
             <div class="card">
                 <div class="card__body">
                     <h3>Ingredients</h3>
+                    <ul>
+                        @foreach ($recipe->ingredients as $ingredient)                     
+                            <li>{{ $ingredient->title }}</li>
+                        @endforeach
+                    </ul>
+                    <form action="{{ $recipe->path() . '/ingredients' }}" method="POST">
+                        @csrf
+                        <input type="text" name="title" placeholder="Add an ingredient to this recipe...">
+                    </form> 
+                    
                 </div>                
             </div>
         </div>

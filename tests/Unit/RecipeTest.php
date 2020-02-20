@@ -37,4 +37,15 @@ class RecipeTest extends TestCase
         $this->assertCount(1, $recipe->steps);
         $this->assertTrue($recipe->steps->contains($step));
     }
+
+    /** @test */
+    public function it_can_add_an_ingredient()
+    {
+        $recipe = factory(Recipe::class)->create();
+        
+        $ingredient = $recipe->addIngredient(['title' => 'Example Ingredient']);
+
+        $this->assertCount(1, $recipe->ingredients);
+        $this->assertTrue($recipe->ingredients->contains($ingredient));
+    }
 }

@@ -57,4 +57,25 @@ class Recipe extends Model
     {
         return $this->steps()->create($attributes);
     }
+
+    /**
+     * Retrieves the Steps of a Recipe
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ingredients()
+    {
+        return $this->hasMany(Ingredient::class);
+    }
+
+    /**
+     * Adds an ingredient to a recipe
+     * 
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function addIngredient($attributes)
+    {
+        return $this->ingredients()->create($attributes);
+    }
 }

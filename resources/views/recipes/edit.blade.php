@@ -45,6 +45,11 @@
                 <div class="card">
                     <div class="card__body">
                         <h3>Ingredients</h3>
+                        <ul>
+                            @foreach ($recipe->ingredients as $ingredient)                     
+                                <li>{{ $ingredient->title }}</li>
+                            @endforeach
+                        </ul>
                     </div>                
                 </div>
             </div>

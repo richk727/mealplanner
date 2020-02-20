@@ -56,7 +56,7 @@ class RecipeStepsTest extends TestCase
         ];
 
         $this->post($recipe->path() . '/steps', $attributes);
-
+        
         $this->get($recipe->path())
             ->assertSee('Test step');
     }

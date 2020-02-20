@@ -32,7 +32,6 @@
                         </a>
                     </div>
                     <div class="welcome-page-card__content">
-                        {{ App\Providers\RouteServiceProvider::HOME }}
                         @if (Route::has('login'))
                         <div class="welcome-page-card-links">
                             @auth
