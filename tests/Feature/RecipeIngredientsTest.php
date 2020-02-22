@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Recipe;
+use App\Ingredient;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -54,5 +55,41 @@ class RecipeIngredientsTest extends TestCase
 
         $this->get($recipe->path())
             ->assertSee('Test Ingredient');
+    }
+
+    /** @test */
+    public function an_ingredient_can_be_updated()
+    {
+        $this->withoutExceptionHandling();        
+        $this->signIn();
+
+        $recipe = auth()->user()->recipes()->create(
+            factory(Recipe::class)->raw()
+        );
+
+        $ingredient = $recipe->addIngredient(['title' => 'Example ingredient']);
+
+        $this->patch($ingredient->path(), [
+            'title' => 'Changed ingredient'
+        ]);
+        
+        $this->assertDatabaseHas('ingredients', [
+            'title' => 'Changed ingredient'
+        ]);
+    }
+
+    /** @test */
+    public function an_ingredient_requires_a_title()
+    {
+         $this->signIn();
+ 
+        $recipe = auth()->user()->recipes()->create(
+            factory(Recipe::class)->raw()
+        );
+
+        $attributes = factory(Ingredient::class)->raw(['title' => '']);
+
+        $this->post($recipe->path() . '/ingredients', $attributes)
+            ->assertSessionHasErrors('title');
     }
 }

@@ -26,8 +26,11 @@ class RecipesTest extends TestCase
             'description' => $this->faker->sentence
         ];
 
-        $this->post('/recipes', $attributes)
-            ->assertRedirect('/recipes');
+        $response = $this->post('/recipes', $attributes);
+
+        $recipe = Recipe::where($attributes)->first();
+
+        $response->assertRedirect($recipe->path());
 
         $this->assertDatabaseHas('recipes', $attributes);
 

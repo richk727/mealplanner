@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Recipe;
 use Illuminate\Database\Eloquent\Model;
 
 class Ingredient extends Model
@@ -14,4 +15,24 @@ class Ingredient extends Model
     protected $fillable = [
         'title'
     ];
+
+    /**
+     * The recipe the ingredient belongs to
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class);
+    }
+
+    /**
+     * Get the path of the ingredient
+     * 
+     * @return string
+     */
+    public function path()
+    {
+        return "{$this->recipe->path()}/ingredients/{$this->id}";
+    }
 }

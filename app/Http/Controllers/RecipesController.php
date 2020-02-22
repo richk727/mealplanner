@@ -39,9 +39,9 @@ class RecipesController extends Controller
         // Validate
         $attributes = $this->validateRequest();
         // Persist
-        auth()->user()->recipes()->create($attributes);        
+        $recipe = auth()->user()->recipes()->create($attributes);        
         // Redirect
-        return redirect('recipes');
+        return redirect( $recipe->path() );
     }
 
     /**
@@ -73,10 +73,10 @@ class RecipesController extends Controller
     {
         if(auth()->user()->isNot($recipe->owner) ) {
             abort(403);
-        };
+        };       
         
         $attributes = $this->validateRequest();
-
+        
         $recipe->update($attributes);
 
         return redirect($recipe->path());

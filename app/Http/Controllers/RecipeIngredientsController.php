@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Ingredient;
 use App\Recipe;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,29 @@ class RecipeIngredientsController extends Controller
         // Persist
         $recipe->addIngredient($attributes);   
         // Redirect
-        return redirect($recipe->path());
+        return redirect($recipe->path() . '/edit');
+    }
+
+    /**
+     * Update an ingredient
+     * 
+     * @param Recipe $recipe
+     * @param Ingredient $ingredient
+     * 
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(Recipe $recipe, Ingredient $ingredient)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+
+        $attributes = $this->validateRequest();
+
+        $ingredient->update($attributes);
+
+        return redirect($recipe->path() . '/edit');
     }
 
     /**

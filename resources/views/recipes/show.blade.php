@@ -24,11 +24,7 @@
                             @foreach ($recipe->steps as $step)                     
                                 <li>{{ $step->body }}</li>
                             @endforeach
-                        </ol> 
-                        <form action="{{ $recipe->path() . '/steps' }}" method="POST">
-                            @csrf
-                            <input type="text" name="body" placeholder="Add a step to this recipe...">
-                        </form>                        
+                        </ol>                                             
                     </div>
                 </div>
             </div>
@@ -42,11 +38,6 @@
                             <li>{{ $ingredient->title }}</li>
                         @endforeach
                     </ul>
-                    <form action="{{ $recipe->path() . '/ingredients' }}" method="POST">
-                        @csrf
-                        <input type="text" name="title" placeholder="Add an ingredient to this recipe...">
-                    </form> 
-                    
                 </div>                
             </div>
         </div>
