@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Ingredient;
 use App\Step;
 use App\Recipe;
 use Facades\Tests\Setup\RecipeFactory;
@@ -63,9 +64,7 @@ class RecipeStepsTest extends TestCase
     }
 
     /** @test */
-    public function a_step_can_be_updated() {
-
-        $this->withoutExceptionHandling();        
+    public function a_step_can_be_updated() {  
         $this->signIn();
 
         $recipe = auth()->user()->recipes()->create(
@@ -81,6 +80,25 @@ class RecipeStepsTest extends TestCase
         $this->assertDatabaseHas('steps', [
             'body' => 'Changed step'
         ]);
+    }
+
+    /** @test */
+    public function unauthorized_users_cannot_delete_a_step()
+    {
+        $step = factory(Step::class)->create();
+
+        $this->delete($step->path())
+            ->assertRedirect('/login');
+
+        $user = $this->signIn();        
+
+        $this->delete($step->path())
+            ->assertStatus(403);
+        
+        $this->actingAs($step->recipe->owner)
+            ->delete($step->path());
+        
+        $this->assertDatabaseMissing('steps', ['body' => $step->body]);
     }
 
     /** @test */

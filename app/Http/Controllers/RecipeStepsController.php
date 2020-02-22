@@ -49,6 +49,26 @@ class RecipeStepsController extends Controller
     }
 
     /**
+     * Delete a step
+     * 
+     * @param Recipe $recipe
+     * @param Step $step
+     * 
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Recipe $recipe, Step $step)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+
+        $step->delete();
+
+        return redirect($recipe->path() . '/edit');
+    }
+    
+    /**
      * Validate the request attributes
      * 
      * @return array

@@ -20,19 +20,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
-    Route::get('/recipes', 'RecipesController@index');
-    Route::get('/recipes/create', 'RecipesController@create');    
-    
-    Route::get('/recipes/{recipe}', 'RecipesController@show');
-    Route::get('/recipes/{recipe}/edit', 'RecipesController@edit');
-    Route::patch('/recipes/{recipe}', 'RecipesController@update');
-
-    Route::post('/recipes', 'RecipesController@store');
+    Route::resource('recipes', 'RecipesController');
 
     Route::post('/recipes/{recipe}/steps', 'RecipeStepsController@store');
     Route::patch('/recipes/{recipe}/steps/{step}', 'RecipeStepsController@update');
+    Route::delete('/recipes/{recipe}/steps/{step}', 'RecipeStepsController@destroy');
+    
 
     Route::post('/recipes/{recipe}/ingredients', 'RecipeIngredientsController@store');
     Route::patch('/recipes/{recipe}/ingredients/{ingredient}', 'RecipeIngredientsController@update');
+    Route::delete('/recipes/{recipe}/ingredients/{ingredient}', 'RecipeIngredientsController@destroy');
 });
 

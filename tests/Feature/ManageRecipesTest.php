@@ -85,6 +85,25 @@ class RecipesTest extends TestCase
     }
 
     /** @test */
+	public function unauthorized_users_cannot_delete_recipes()
+	{
+        $recipe = RecipeFactory::create();
+        
+		$this->delete($recipe->path())
+			->assertRedirect('/login');
+
+		$user = $this->signIn();
+
+		$this->delete($recipe->path())
+            ->assertStatus(403);
+        
+        $this->actingAs($recipe->owner)
+            ->delete($recipe->path());
+
+        $this->assertDatabaseMissing('recipes', ['title' => $recipe->title]);
+	}
+
+    /** @test */
     public function an_authenticated_user_cannot_view_the_recipes_of_others()
     {
         $this->signIn();

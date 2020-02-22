@@ -7,7 +7,12 @@
             <div class="text-large"><a class="text-muted" href="/recipes">My Recipes</a>  / <span class="text-primary">{{ $recipe->title }}</span></div>
         </div>
         
-        <div class="col-md-6 text-md-right">
+        <div class="col-md-6 text-md-right d-flex justify-content-end">
+            <form action="{{ $recipe->path() }}" method="post">
+                @method("DELETE")
+                @csrf
+                <button type="submit" class="button button-muted text-red">Delete Recipe</button>            
+            </form>
             <a class="button button-muted" href="{{ $recipe->path() }}">Cancel Editing</a>
             <button class="button button-primary" type="submit" onclick="document.getElementById('recipe-form').submit()">Save Changes</button>
         </div>        
@@ -17,7 +22,7 @@
             <div class="card">     
                 <div class="row">
                     <div class="col-md-6">
-                        <img class="img-fluid" src="https://placedog.net/445/335?random" alt="" srcset="">
+                        <img class="img-fluid" src="https://source.unsplash.com/random/445x335?food" alt="" srcset="">
                     </div>
                     <div class="col-md-6">
                         <form action="{{ $recipe->path() }}" method="POST" id="recipe-form">
@@ -38,11 +43,18 @@
                         <ol>                            
                             @foreach ($recipe->steps as $step)           
                                 <li>
-                                    <form action="{{ $step->path() }}" method="POST" >
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="text" name="body" value="{{ $step->body }}">                                            
-                                    </form>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <form action="{{ $step->path() }}" method="POST" >
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="text" name="body" value="{{ $step->body }}">                                        
+                                        </form>
+                                        <form action="{{ $step->path() }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" title="Remove Step">X</button>                                
+                                        </form>
+                                    </div>
                                 </li>
                             @endforeach
                         </ol>
@@ -61,11 +73,19 @@
                     <ul>
                         @foreach ($recipe->ingredients as $ingredient)
                             <li>
-                                <form action="{{ $ingredient->path() }}" method="POST" >
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="text" name="title" value="{{ $ingredient->title }}">                                            
-                                </form>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <form action="{{ $ingredient->path() }}" method="POST" >
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="text" name="title" value="{{ $ingredient->title }}">                                            
+                                    </form>
+
+                                    <form action="{{ $ingredient->path() }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Remove Ingredient">X</button>                                
+                                    </form>
+                                </div>
                             </li>
                         @endforeach
                     </ul>

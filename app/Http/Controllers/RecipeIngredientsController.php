@@ -49,6 +49,25 @@ class RecipeIngredientsController extends Controller
     }
 
     /**
+     * Delete an ingredient
+     * 
+     * @param Recipe $recipe
+     * @param Ingredient $ingredient
+     * 
+     * * @return \Illuminate\Http\Response
+     */
+    public function destroy(Recipe $recipe, Ingredient $ingredient)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+
+        $ingredient->delete();
+        
+        return redirect($recipe->path() . '/edit');
+    }
+
+    /**
      * Validate the request attributes
      * 
      * @return array

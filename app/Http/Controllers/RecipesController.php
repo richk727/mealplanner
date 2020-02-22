@@ -100,6 +100,24 @@ class RecipesController extends Controller
     }
 
     /**
+     * Delete a recipe
+     * 
+     * @param Recipe $recipe
+     * 
+     * * @return \Illuminate\Http\Response
+     */
+    public function destroy(Recipe $recipe)
+    {
+        if(auth()->user()->isNot($recipe->owner) ) {
+            abort(403);
+        };
+
+        $recipe->delete();
+        
+        return redirect('/recipes');
+    }
+
+    /**
      * Validate the request attributes
      * 
      * @return array

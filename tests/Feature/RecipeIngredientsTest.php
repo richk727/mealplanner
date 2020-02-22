@@ -79,6 +79,25 @@ class RecipeIngredientsTest extends TestCase
     }
 
     /** @test */
+	public function unauthorized_users_cannot_delete_an_ingredient()
+	{        
+		$ingredient = factory(Ingredient::class)->create();
+
+		$this->delete($ingredient->path())
+			->assertRedirect('/login');
+
+		$user = $this->signIn();
+
+		$this->delete($ingredient->path())
+            ->assertStatus(403);
+            
+        $this->actingAs($ingredient->recipe->owner)
+            ->delete($ingredient->path());
+
+        $this->assertDatabaseMissing('ingredients', ['title' => $ingredient->title]);
+	}
+
+    /** @test */
     public function an_ingredient_requires_a_title()
     {
          $this->signIn();

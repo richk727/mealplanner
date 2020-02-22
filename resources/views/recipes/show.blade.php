@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="row">
                     <div class="col-md-6">
-                        <img class="img-fluid" src="https://placedog.net/445/335?random" alt="" srcset="">
+                        <img class="img-fluid" src="https://source.unsplash.com/random/445x335?food" alt="" srcset="">
                     </div>
                     <div class="col-md-6">
                         <h3 class="my-4">{{ $recipe->title }}</h3>
