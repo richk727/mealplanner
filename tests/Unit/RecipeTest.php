@@ -27,6 +27,15 @@ class RecipeTest extends TestCase
         $this->assertInstanceOf('App\User', $recipe->owner);
     }
 
+
+    /** @test */
+    public function it_has_a_difficulty()
+    {
+        $recipe = factory(Recipe::class)->create();
+        
+        $this->assertInstanceOf('App\Difficulty', $recipe->difficulty);
+    }
+    
     /** @test */
     public function it_can_add_a_step()
     {

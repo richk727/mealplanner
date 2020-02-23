@@ -18,13 +18,18 @@
                         <img class="img-fluid" src="https://source.unsplash.com/random/445x335?food" alt="" srcset="">
                     </div>
                     <div class="col-md-6">
-                        <h3 class="my-4">{{ $recipe->title }}</h3>
-                        <p>{{ $recipe->description }}</p>
-                        <ol>                            
-                            @foreach ($recipe->steps as $step)                     
-                                <li>{{ $step->body }}</li>
-                            @endforeach
-                        </ol>                                             
+                        <div class="py-4 pr-4">
+                            <h3 class="my-4">{{ $recipe->title }}</h3>
+                            <p class="mb-4">{{ $recipe->description }}</p>
+                            <h3 class="mb-4">Methods</h3>
+                            <ol class="list-group">                            
+                                @forelse ($recipe->steps as $step)                     
+                                    <li class="list-group-item">{{ $step->body }}</li>
+                                @empty
+                                    <li class="list-group-item">This recipe has no steps!</li>
+                                @endforelse
+                            </ol>
+                        </div>                                   
                     </div>
                 </div>
             </div>
@@ -32,11 +37,13 @@
         <div class="col-lg-3">
             <div class="card">
                 <div class="card__body">
-                    <h3>Ingredients</h3>
-                    <ul>
-                        @foreach ($recipe->ingredients as $ingredient)                     
-                            <li>{{ $ingredient->title }}</li>
-                        @endforeach
+                    <h3 class="mb-4">Ingredients</h3>
+                    <ul class="list-group">
+                        @forelse ($recipe->ingredients as $ingredient)                     
+                            <li class="list-group-item">{{ $ingredient->title }}</li>
+                        @empty 
+                            <li class="list-group-item">This recipe has no ingredients!</li>
+                        @endforelse
                     </ul>
                 </div>                
             </div>

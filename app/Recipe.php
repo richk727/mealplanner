@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Step;
+use App\Difficulty;
 use Illuminate\Database\Eloquent\Model;
 
 class Recipe extends Model
@@ -35,6 +36,16 @@ class Recipe extends Model
     public function owner()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Retrieves the difficulty of the recipe
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function difficulty()
+    {
+        return $this->belongsTo(Difficulty::class);
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRecipesTable extends Migration
+class CreateDifficultiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateRecipesTable extends Migration
      */
     public function up()
     {
-        Schema::create('recipes', function (Blueprint $table) {
+        Schema::create('difficulties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('owner_id');
             $table->string('title');
-            $table->text('description')->nullable(true);
-            $table->unsignedBigInteger('difficulty_id')->default(0);
-            $table->unsignedBigInteger('cost_id');
+            $table->bigInteger('level');
             $table->timestamps();
-            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -32,6 +28,6 @@ class CreateRecipesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes');
+        Schema::dropIfExists('difficulties');
     }
 }

@@ -10,6 +10,7 @@ $factory->define(Recipe::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence,
         'description' => $faker->sentence,
-        'owner_id' => factory(User::class)
+        'owner_id' => factory(User::class),
+        'difficulty_id' => 1
     ];
 });

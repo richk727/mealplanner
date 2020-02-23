@@ -150,5 +150,5 @@ class RecipesTest extends TestCase
 
         $this->post('/recipes', $attributes)
             ->assertSessionHasErrors('title');
-    }   
+    }
 }
