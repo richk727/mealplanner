@@ -37,9 +37,7 @@ class RecipeIngredientsController extends Controller
      */
     public function update(Recipe $recipe, Ingredient $ingredient)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };
+        $this->authorize('update', $ingredient->recipe);
 
         $attributes = $this->validateRequest();
 
@@ -58,9 +56,7 @@ class RecipeIngredientsController extends Controller
      */
     public function destroy(Recipe $recipe, Ingredient $ingredient)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };
+        $this->authorize('update', $ingredient->recipe);
 
         $ingredient->delete();
         

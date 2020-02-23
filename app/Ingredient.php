@@ -17,6 +17,13 @@ class Ingredient extends Model
     ];
 
     /**
+     * All the relationships to be touched
+     * 
+     * @var array
+     */
+    protected $touches = ['recipe'];
+    
+    /**
      * The recipe the ingredient belongs to
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -110,6 +110,17 @@ class RecipesTest extends TestCase
         
         $recipe = factory(Recipe::class)->create();
         
+        $this->patch($recipe->path(), [])
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_update_the_recipes_of_others()
+    {
+        $this->signIn();
+        
+        $recipe = factory(Recipe::class)->create();
+        
         $this->get($recipe->path())
             ->assertStatus(403);
     }

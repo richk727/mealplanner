@@ -17,6 +17,13 @@ class Step extends Model
     ];
 
     /**
+     * All the relationships to be touched
+     * 
+     * @var array
+     */
+    protected $touches = ['recipe'];
+
+    /**
      * Get recipe this step belongs to
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

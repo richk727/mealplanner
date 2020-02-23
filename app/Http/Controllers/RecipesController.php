@@ -54,9 +54,7 @@ class RecipesController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };
+        $this->authorize('update', $recipe);
         
         return view('recipes.show', compact('recipe')); 
     }
@@ -71,9 +69,7 @@ class RecipesController extends Controller
      */
     public function update(Recipe $recipe)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };       
+        $this->authorize('update', $recipe);
         
         $attributes = $this->validateRequest();
         
@@ -92,9 +88,7 @@ class RecipesController extends Controller
      */
     public function edit(Recipe $recipe)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };
+        $this->authorize('update', $recipe);
         
         return view('recipes.edit', compact('recipe')); 
     }
@@ -108,9 +102,7 @@ class RecipesController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        if(auth()->user()->isNot($recipe->owner) ) {
-            abort(403);
-        };
+        $this->authorize('update', $recipe);
 
         $recipe->delete();
         

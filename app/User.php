@@ -37,9 +37,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
+    /**
+     * Recipes owned by the user
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function recipes()
     {
-        return $this->hasMany(Recipe::class, 'owner_id');
+        return $this->hasMany(Recipe::class, 'owner_id')->orderBy('updated_at', 'desc');
     }
 }
