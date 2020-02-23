@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Recipe;
 use App\Ingredient;
 use Tests\TestCase;
+use Facades\Tests\Setup\RecipeFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,10 +21,11 @@ class RecipeIngredientsTest extends TestCase
         $this->post($project->path() . '/ingredients')->assertRedirect('login');
     }
 
-    /** @test */
-    public function only_the_recipe_owner_may_add_ingredients()
+   /** @test */
+    public function only_the_owner_of_a_recipe_may_add_ingredients()
     {
         $this->signIn();
+
         $project = factory(Recipe::class)->create();
         
         $attributes = [
@@ -37,13 +39,28 @@ class RecipeIngredientsTest extends TestCase
     }
 
     /** @test */
-    public function a_recipe_can_have_ingredients()
-    {        
+    public function only_the_owner_of_a_recipe_may_update_ingredients()
+    {
         $this->signIn();
 
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
+        $recipe = RecipeFactory::withIngredients(1)
+            ->create();
+
+        $attributes = [
+            'title' => 'Changed Ingredient'
+        ];
+
+        $this->patch($recipe->ingredients->first()->path(), $attributes)
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('ingredients', $attributes);
+    }
+
+    /** @test */
+    public function a_recipe_can_have_ingredients()
+    {        
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->create();
 
         $attributes = [
             'title' => 'Test Ingredient'
@@ -60,16 +77,11 @@ class RecipeIngredientsTest extends TestCase
     /** @test */
     public function an_ingredient_can_be_updated()
     {
-        $this->withoutExceptionHandling();        
-        $this->signIn();
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->withIngredients(1)
+            ->create();
 
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
-
-        $ingredient = $recipe->addIngredient(['title' => 'Example ingredient']);
-
-        $this->patch($ingredient->path(), [
+        $this->patch($recipe->ingredients->first()->path(), [
             'title' => 'Changed ingredient'
         ]);
         
@@ -100,11 +112,8 @@ class RecipeIngredientsTest extends TestCase
     /** @test */
     public function an_ingredient_requires_a_title()
     {
-         $this->signIn();
- 
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->create();
 
         $attributes = factory(Ingredient::class)->raw(['title' => '']);
 

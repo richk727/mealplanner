@@ -17,7 +17,7 @@ class RecipeStepsTest extends TestCase
     /** @test */
     function guests_cannot_add_a_step()
     {
-        $recipe = factory(Recipe::class)->create();
+        $recipe = RecipeFactory::create();
 
         $attributes = [
             'body' => 'Test step',
@@ -32,7 +32,7 @@ class RecipeStepsTest extends TestCase
     {
         $this->signIn();
 
-        $recipe = factory(Recipe::class)->create();
+        $recipe = RecipeFactory::create();
 
         $attributes = [
             'body' => 'Test step',
@@ -41,39 +41,50 @@ class RecipeStepsTest extends TestCase
         $this->post($recipe->path() . '/steps', $attributes)
             ->assertStatus(403);
 
-        $this->assertDatabaseMissing('steps', ['body' => 'Test step']);
+        $this->assertDatabaseMissing('steps', $attributes);
     }
+
+    /** @test */
+    function only_the_owner_of_a_recipe_may_update_steps()
+    {
+        $this->signIn();
+
+        $recipe = RecipeFactory::withSteps(1)->create();
+
+        $attributes = [
+            'body' => 'Updated step',
+        ];
+
+        $this->patch($recipe->steps->first()->path(), $attributes)
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('steps', $attributes);
+    }    
 
     /** @test */
     public function a_recipe_can_have_steps()
     {
-        $this->signIn();
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->create();
 
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
-
-        $attributes = [
-            'body' => 'Test step',
-        ];
+        $attributes = ['body' => 'Test step'];
 
         $this->post($recipe->path() . '/steps', $attributes);
         
+        $this->assertDatabaseHas('steps', $attributes);
+
         $this->get($recipe->path())
             ->assertSee('Test step');
     }
 
     /** @test */
-    public function a_step_can_be_updated() {  
-        $this->signIn();
+    public function a_step_can_be_updated()
+    {
+        $recipe = RecipeFactory::ownedby($this->signIn())
+            ->withSteps(1)
+            ->create();
 
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
-
-        $step = $recipe->addStep(['body' => 'Example step']);
-
-        $this->patch($step->path(), [
+        $this->patch($recipe->steps->first()->path(), [
             'body' => 'Changed step'
         ]);
         
@@ -104,11 +115,8 @@ class RecipeStepsTest extends TestCase
     /** @test */
     public function a_step_requires_a_body()
     {
-        $this->signIn();
-
-        $recipe = auth()->user()->recipes()->create(
-            factory(Recipe::class)->raw()
-        );
+        $recipe = RecipeFactory::ownedby($this->signIn())
+            ->create();
 
         $attributes = factory(Step::class)->raw(['body' => '']);
 

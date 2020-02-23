@@ -15,8 +15,6 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_create_a_recipe()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $this->get('recipes/create')->assertStatus(200);
@@ -32,17 +30,16 @@ class RecipesTest extends TestCase
 
         $response->assertRedirect($recipe->path());
 
-        $this->assertDatabaseHas('recipes', $attributes);
-
-        $this->get('/recipes')->assertSee($attributes['title']);
+        $this->get('/recipes')
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description']);
     }
     
     /** @test */
     public function a_user_can_view_their_recipe()
     {
-        $this->signIn();
-        
-        $recipe = factory(Recipe::class)->create(['owner_id' => auth()->id()]);
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->create();
         
         $this->get($recipe->path())
             ->assertSee($recipe->title)
@@ -52,9 +49,8 @@ class RecipesTest extends TestCase
     /** @test */
     public function a_user_can_edit_their_recipe()
     {
-        $this->signIn();
-        
-        $recipe = factory(Recipe::class)->create(['owner_id' => auth()->id()]);
+        $recipe = RecipeFactory::ownedBy($this->signIn())
+            ->create();
         
         $this->get($recipe->path() . '/edit')
             ->assertSee($recipe->title)
@@ -63,11 +59,8 @@ class RecipesTest extends TestCase
 
     /** @test */
     public function a_user_can_update_a_recipe()
-    {        
-        $this->withoutExceptionHandling();
-
-        $recipe = RecipeFactory::create();
-        
+    {
+        $recipe = RecipeFactory::create();        
         
         $attributes = [
             'title' => 'Changed Title',
@@ -104,7 +97,7 @@ class RecipesTest extends TestCase
 	}
 
     /** @test */
-    public function an_authenticated_user_cannot_view_the_recipes_of_others()
+    public function an_authenticated_user_cannot_update_the_recipes_of_others()
     {
         $this->signIn();
         
@@ -115,7 +108,7 @@ class RecipesTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_cannot_update_the_recipes_of_others()
+    public function an_authenticated_user_cannot_view_the_recipes_of_others()
     {
         $this->signIn();
         
